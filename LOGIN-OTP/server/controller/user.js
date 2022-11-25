@@ -2,7 +2,6 @@ const User = require("../model/user");
 const VerificationToken = require("../model/verificationToken");
 const ResetToken = require("../model/resetToken");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
 const { sendError, createRandomBytes } = require("../utils/helper");
 const {
   generateOTP,
