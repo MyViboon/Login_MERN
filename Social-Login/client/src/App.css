@@ -44,9 +44,9 @@
     width: 30%;
     padding: 10px;
     border-radius: 20px;
-    box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
--webkit-box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
--moz-box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
+    box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
 }
 
 .img{
@@ -112,9 +112,9 @@
     width: 60%;
     height: 75%;
     background-color: white;
-    box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
-    -webkit-box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
-    -moz-box-shadow: -10px 16px 28px -12px rgba(0,0,0,0.51);
+    box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 3px 19px -1px rgba(0,0,0,0.75);
     display: flex;
     align-items: center;
     border-radius: 20px;

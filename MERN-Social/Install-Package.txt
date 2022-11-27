@@ -1,0 +1,17 @@
+--------------server----------------
+
+> npm i express mongoose dotenv cors cookie-parser bcrypt jsonwebtoken cloudinary express-fileupload googleapis node-fetch nodemailer
+> npm i -D nodemon
+
+
+--------------client----------------
+
+>npm i axios react-router-dom redux react-redux
+
+
+วิธีหา refresh_token
+
+1. ไป https://developers.google.com/oauthplayground
+2. ไปรูปเฟือง ใส่ id, secret 
+3. https://mail.google.com 
+4. เลือก เมล์แล้วทำตาม step 2,3

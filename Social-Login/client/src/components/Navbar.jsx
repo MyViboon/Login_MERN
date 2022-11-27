@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ user }) => {
+
+  const logout =()=> {
+    window.open("http://localhost:5000/auth/google", "_self");
+  }
   return (
     <div className="navbar">
       <span className="logo">
@@ -19,7 +23,7 @@ const Navbar = ({ user }) => {
             />
           </li>
           <li className="listItem">John Doe</li>
-          <li className="listItem">Logout</li>
+          <li className="listItem" onClick={logout}>Logout</li>
         </ul>
       ) : (
         <Link className="link" to="/login">Login</Link>
