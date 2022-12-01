@@ -21,7 +21,8 @@ app.use(
 connectDB()
 
 //router
-app.use('/api', require('./routes/userRouter'))
+app.use('/user', require('./routes/userRouter'))
+app.use('/api', require('./routes/upload'))
 
 app.listen(PORT, () => {
   console.log("Server is running on: ", PORT);
