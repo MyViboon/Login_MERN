@@ -89,7 +89,7 @@ const userCtrl = {
         // path: "/refresh_token",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
-      // res.clearCookie("refreshtoken")
+    
       res.json({ msg: "Login success!" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });

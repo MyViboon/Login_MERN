@@ -1,0 +1,15 @@
+import React from "react";
+import { legacy_createStore as createStore } from "redux";
+import rootReducer from "./reducers";
+import { Provider } from "react-redux";
+
+const DataProvider = ({ children }) => {
+  const store = createStore(
+    rootReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
+  return <Provider store={store}>{children}</Provider>;
+};
+
+export default DataProvider;

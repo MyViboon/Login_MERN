@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+// const { google } = require("googleapis");
 // const { OAuth2 } = google.auth;
 // const OAUTH_PLAYGROUND = "https://developers.google.com/oauthplayground";
 
@@ -66,12 +66,9 @@ const sendEmail = (to, url, txt) => {
         `,
   };
 
-  transport.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(info);
-    }
+  transport.sendMail(mailOptions, (err, infor) => {
+    if (err) return err;
+    return infor
   });
 };
 
