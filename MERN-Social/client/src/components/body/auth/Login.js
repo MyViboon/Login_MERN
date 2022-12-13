@@ -28,10 +28,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axiox.post('/user/login', {email,password})
-      console.log(res)
       setUser({ ...user, err: "", success: res.data.msg })
 
-      localStorage.setItem('firstlogin', true)
+      localStorage.setItem('firstLogin', true)
 
       dispatch(dispatchLogin())
       navigate('/')

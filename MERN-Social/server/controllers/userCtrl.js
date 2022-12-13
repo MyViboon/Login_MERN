@@ -56,8 +56,8 @@ const userCtrl = {
 
       const check = await User.findOne({ email });
       if (check)
-        return res.status(400).json({ msg: "This email already exists!" });
-
+      return res.status(400).json({ msg: "This email already exists!" });
+      
       const newUser = new User({
         name,
         email,
@@ -67,6 +67,7 @@ const userCtrl = {
       await newUser.save();
 
       res.json({ msg: "Account has been activated!" });
+
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
