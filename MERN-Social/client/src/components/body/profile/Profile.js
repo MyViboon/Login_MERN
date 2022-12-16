@@ -39,11 +39,13 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [callback, setCallback] = useState(false);
 
-  useEffect(() => {
-    fetchAllUser(token).then((res) => {
-      dispatch(dispatchGetAllUsers(res));
-    });
-  }, [token, isAdmin, dispatch, callback]);
+useEffect(() => {
+  if(isAdmin){
+      fetchAllUser(token).then(res =>{
+          dispatch(dispatchGetAllUsers(res))
+      })
+  }
+},[token, isAdmin, dispatch, callback])
 
   const { name, password, cf_password, err, success } = data;
 
@@ -56,7 +58,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const file = e.target.files[0];
-
+  
       if (!file)
         return setData({ ...data, err: "No files ware upload!", success: "" });
 

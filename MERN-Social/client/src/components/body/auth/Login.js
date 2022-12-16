@@ -1,9 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate,  } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axiox from "axios";
-import {showErrMsg,showSccessMsg} from '../../utils/notification/Notification'
-import {dispatchLogin} from '../../../redux/actions/authAction'
+import {
+  showErrMsg,
+  showSccessMsg,
+} from "../../utils/notification/Notification";
+import { dispatchLogin } from "../../../redux/actions/authAction";
 import { useDispatch } from "react-redux";
+// import { GoogleLogin } from "react-google-login";
+// import { gapi } from "gapi-script";
+import jwt_decode from "jwt-decode"
 
 const initialState = {
   email: "",
@@ -16,8 +22,71 @@ const Login = () => {
   const [user, setUser] = useState(initialState);
 
   const { email, password, err, success } = user;
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const clientID =
+    "768817129404-17dnvi7bg1deleuto56aii38p9ksttkm.apps.googleusercontent.com";
+
+  // useEffect(() => {
+  //   const initClient = () => {
+  //     gapi.client.init({
+  //       clientId: clientID,
+  //       scope: "",
+  //     });
+  //   };
+  //   gapi.load("client:auth2", initClient);
+  // }, []);
+
+  const handleCallbackResponse = async (response) => {
+    let userObject = jwt_decode(response.credential)
+    console.log(userObject);
+    try {
+      const res = await axiox.post("user/login_google", {
+        tokenId: jwt_decode(response.credential),
+      });
+
+      setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+
+      dispatch(dispatchLogin());
+      navigate("/");
+    } catch (err) {
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
+    }
+  };
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: clientID,
+      callback: handleCallbackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signinDiv"), {
+      theme: "filled_blue",
+      size: "medium",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // const responseGoogle = async (response) => {
+  //   console.log("success", response);
+  //   try {
+  //     const res = await axiox.post("user/login_google", {
+  //       tokenId: response.tokenId,
+  //     });
+
+  //     setUser({ ...user, err: "", success: res.data.msg });
+  //     localStorage.setItem("firstLogin", true);
+
+  //     dispatch(dispatchLogin());
+  //     navigate("/");
+  //   } catch (err) {
+  //     err.response.data.msg &&
+  //       setUser({ ...user, err: err.response.data.msg, success: "" });
+  //   }
+  // };
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -27,18 +96,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiox.post('/user/login', {email,password})
-      setUser({ ...user, err: "", success: res.data.msg })
+      const res = await axiox.post("/user/login", { email, password });
+      setUser({ ...user, err: "", success: res.data.msg });
 
-      localStorage.setItem('firstLogin', true)
+      localStorage.setItem("firstLogin", true);
 
-      dispatch(dispatchLogin())
-      navigate('/')
-
+      dispatch(dispatchLogin());
+      navigate("/");
     } catch (err) {
-      err.response.data.msg && setUser({ ...user, err: err.response.data.msg, success: "" })
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
     }
-    
   };
 
   return (
@@ -77,8 +145,23 @@ const Login = () => {
         </div>
       </form>
 
-      <p>New Customer? <Link to="/register">Register</Link></p>
+      <div className="hr">Or Login With</div>
 
+      {/* <div className="social">
+        <GoogleLogin
+          clientId={clientID}
+          buttonText="Login wtih google"
+          onSuccess={handleCallbackResponse}
+          cookiePolicy={"single_host_origin"}
+          isSignedIn={false}
+        />
+        ,
+      </div> */}
+      <div id="signinDiv"></div>
+
+      <p>
+        New Customer? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 };

@@ -6,7 +6,7 @@
 
 --------------client----------------
 
->npm i axios react-router-dom redux react-redux
+>npm i axios react-router-dom redux react-redux react-google-login gapi-script jwt-decode
 
 
 วิธีหา refresh_token
@@ -15,3 +15,8 @@
 2. ไปรูปเฟือง ใส่ id, secret 
 3. https://mail.google.com 
 4. เลือก เมล์แล้วทำตาม step 2,3
+
+
+ตั้ง password แบบ ปลอดภัย
+
+https://delinea.com/resources/password-generator-it-tool
