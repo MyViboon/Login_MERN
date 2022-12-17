@@ -7,9 +7,10 @@ import {
 } from "../../utils/notification/Notification";
 import { dispatchLogin } from "../../../redux/actions/authAction";
 import { useDispatch } from "react-redux";
-// import { GoogleLogin } from "react-google-login";
-// import { gapi } from "gapi-script";
-import jwt_decode from "jwt-decode"
+import { GoogleLogin } from "react-google-login";
+import { gapi } from "gapi-script";
+import FacebookLogin from "react-facebook-login";
+// import jwt_decode from "jwt-decode";
 
 const initialState = {
   email: "",
@@ -27,54 +28,22 @@ const Login = () => {
   const clientID =
     "768817129404-17dnvi7bg1deleuto56aii38p9ksttkm.apps.googleusercontent.com";
 
-  // useEffect(() => {
-  //   const initClient = () => {
-  //     gapi.client.init({
-  //       clientId: clientID,
-  //       scope: "",
-  //     });
-  //   };
-  //   gapi.load("client:auth2", initClient);
-  // }, []);
-
-  const handleCallbackResponse = async (response) => {
-    let userObject = jwt_decode(response.credential)
-    console.log(userObject);
-    try {
-      const res = await axiox.post("user/login_google", {
-        tokenId: jwt_decode(response.credential),
-      });
-
-      setUser({ ...user, err: "", success: res.data.msg });
-      localStorage.setItem("firstLogin", true);
-
-      dispatch(dispatchLogin());
-      navigate("/");
-    } catch (err) {
-      err.response.data.msg &&
-        setUser({ ...user, err: err.response.data.msg, success: "" });
-    }
-  };
-
   useEffect(() => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: clientID,
-      callback: handleCallbackResponse,
-    });
+    const initClient = () => {
+      gapi.client.init({
+        clientId: clientID,
+        scope: "",
+      });
+    };
+    gapi.load("client:auth2", initClient);
+  });
 
-    google.accounts.id.renderButton(document.getElementById("signinDiv"), {
-      theme: "filled_blue",
-      size: "medium",
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // const responseGoogle = async (response) => {
-  //   console.log("success", response);
+  // const handleCallbackResponse = async (response) => {
+  //   let userObject = jwt_decode(response.credential);
+  //   console.log(userObject);
   //   try {
   //     const res = await axiox.post("user/login_google", {
-  //       tokenId: response.tokenId,
+  //       tokenId: jwt_decode(response.credential),
   //     });
 
   //     setUser({ ...user, err: "", success: res.data.msg });
@@ -87,6 +56,58 @@ const Login = () => {
   //       setUser({ ...user, err: err.response.data.msg, success: "" });
   //   }
   // };
+
+  // useEffect(() => {
+  //   /* global google */
+  //   google.accounts.id.initialize({
+  //     client_id: clientID,
+  //     callback: handleCallbackResponse,
+  //   });
+
+  //   google.accounts.id.renderButton(document.getElementById("signinDiv"), {
+  //     theme: "filled_blue",
+  //     size: "medium",
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  const responseGoogle = async (response) => {
+    console.log("success", response);
+    try {
+      const res = await axiox.post("user/login_google", {
+        tokenId: response.tokenId,
+      });
+
+      setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+
+      dispatch(dispatchLogin());
+      navigate("/");
+    } catch (err) {
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
+    }
+  };
+  
+  const responseFacebook = async (response) => {
+    console.log(response);
+    try {
+      const { accessToken, userID } = response;
+      const res = await axiox.post("/user/facebook_login", {
+        accessToken,
+        userID,
+      });
+      setUser({ ...user, err: "", success: res.data.msg });
+
+      localStorage.setItem("firstLogin", true);
+
+      dispatch(dispatchLogin());
+      navigate("/");
+    } catch (err) {
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
+    }
+  };
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -112,10 +133,8 @@ const Login = () => {
   return (
     <div className="login_page">
       <h2>Login</h2>
-
       {err && showErrMsg(err)}
       {success && showSccessMsg(success)}
-
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email Address</label>
@@ -144,21 +163,23 @@ const Login = () => {
           <Link to="/forgot_password">Forgot your password?</Link>
         </div>
       </form>
-
       <div className="hr">Or Login With</div>
-
-      {/* <div className="social">
+      <div className="social">
         <GoogleLogin
           clientId={clientID}
-          buttonText="Login wtih google"
-          onSuccess={handleCallbackResponse}
+          buttonText="Sign in with Google"
+          onSuccess={responseGoogle}
           cookiePolicy={"single_host_origin"}
-          isSignedIn={false}
+        />
+        ,{/* <div id="signinDiv"></div> */}
+        <FacebookLogin
+          appId="Your facebook app id"
+          autoLoad={false}
+          fields="name,email,picture"
+          callback={responseFacebook}
         />
         ,
-      </div> */}
-      <div id="signinDiv"></div>
-
+      </div>
       <p>
         New Customer? <Link to="/register">Register</Link>
       </p>

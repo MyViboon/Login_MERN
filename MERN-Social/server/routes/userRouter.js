@@ -30,4 +30,6 @@ router.delete("/delete/:id", auth, authAdmin, userController.deleteUser);
 //Social login
 router.post("/login_google", userController.googleLogin);
 
+router.post("/facebook_login", userController.facebookLogin);
+
 module.exports = router;

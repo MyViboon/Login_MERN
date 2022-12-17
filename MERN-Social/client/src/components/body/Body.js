@@ -9,6 +9,7 @@ import ForgotPassword from './auth/ForgotPassword'
 import ResetPassword from './auth/ResetPassword'
 import Profile from './profile/Profile'
 import EditUser from './profile/EditUser'
+import Home from './home/Home'
 
 const Body = () => {
 
@@ -17,6 +18,8 @@ const Body = () => {
   return (
     <section>
       <Routes>
+        <Route path='/' element={<Home/>} exact/>
+
         <Route path='/login' element={isLogged ? <Notfound/> : <Login/>}/>
         <Route path='/register' element={isLogged ? <Notfound/> : <Register/>}/>
 

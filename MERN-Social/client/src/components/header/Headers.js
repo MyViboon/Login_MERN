@@ -25,7 +25,7 @@ const handleLogout = async () => {
 const userLink = () => {
   return <li className="drop-nav">
     <Link to="#" className="avatar">
-      <img src={user.avatar} alt=''/> {user.name} <FontAwesomeIcon icon={faAngleDown}/>
+      <img src={user.avatar} alt='' referrerPolicy="no-referrer"/> {user.name} <FontAwesomeIcon icon={faAngleDown}/>
     </Link>
     <ul className="dropdown">
        <li><Link to='/profile'>Profile</Link></li>
